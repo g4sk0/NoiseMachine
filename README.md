@@ -3,7 +3,9 @@
 > **"Data Poisoning for the Modern Web."**
 > *Obfuscate your digital footprint by generating realistic background noise traffic and spoofing browser fingerprints.*
 
-![Noise Machine Logo](icons/antisurveilence.png)
+<p align="center">
+  <img src="icons/readme.png" width="200" alt="Noise Machine Logo">
+</p>
 
 ## 💀 What is this?
 **The Noise Machine** is a privacy-focused Chrome Extension designed to combat surveillance capitalism and ad-tracking algorithms. Instead of just blocking trackers (which makes you unique), it **floods them with junk data**.
