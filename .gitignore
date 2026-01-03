@@ -1,0 +1,17 @@
+# System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Extension Metadata
+_metadata/
+*.pem
+*.crx
+
+# Logs & Debug
+*.log
+npm-debug.log
+
+# Node (Future proofing)
+node_modules/
+dist/

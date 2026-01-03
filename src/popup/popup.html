@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Noise Machine</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --accent-color: #00e676;
+      /* Neon Green */
+      --accent-hover: #00c853;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --border-color: #333333;
+      --danger-color: #ff5252;
+      --font-stack: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      width: 360px;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-stack);
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    /* --- Global Reset & Utils --- */
+    * {
+      box-sizing: border-box;
+    }
+
+    button,
+    select,
+    input {
+      font-family: inherit;
+      outline: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    /* --- Header & Tabs --- */
+    .app-header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .tab-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 5px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 12px 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      width: 100%;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-color);
+      border-bottom-color: var(--accent-color);
+    }
+
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* --- Main Content --- */
+    .main-content {
+      padding: 16px;
+      min-height: 400px;
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(2px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- Cards & Sections --- */
+    .section-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* --- Form Elements --- */
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .control-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .control-label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .formatted-value {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: var(--accent-color);
+      font-size: 12px;
+      border: 1px solid var(--border-color);
+      user-select: all;
+      word-break: break-all;
+    }
+
+    /* Inputs */
+    input[type="text"],
+    input[type="number"],
+    select {
+      background-color: #121212;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px;
+      border-radius: 4px;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+    }
+
+    .btn-secondary {
+      background-color: #333;
+      color: var(--text-primary);
+      border: 1px solid #444;
+    }
+
+    .btn-secondary:hover {
+      background-color: #444;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    /* Switch Toggle (Material Design ish) */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #444;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(14px);
+    }
+
+    /* --- Specific Modules --- */
+
+    /* Burner Email List */
+    #inbox-list {
+      background: #121212;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .email-item {
+      padding: 10px;
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .email-item:hover {
+      background-color: #222;
+    }
+
+    .email-item:last-child {
+      border-bottom: none;
+    }
+
+    .email-subject {
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .email-from {
+      color: #888;
+      font-size: 11px;
+    }
+
+    /* Status Indicator */
+    .status-indicator {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .status-indicator.active {
+      color: var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="app-header">
+    <div
+      style="display:flex; align-items:center; justify-content:center; padding:16px 0; background:linear-gradient(180deg, #1e1e1e 0%, #121212 100%); border-bottom:1px solid #333;">
+      <img src="../../icons/antisurveilence.png"
+        style="height:35px; width:35px; margin-right:10px; filter: drop-shadow(0 0 5px rgba(0,230,118,0.4));">
+      <div
+        style="font-weight:900; font-size:16px; letter-spacing:1.5px; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+        NOISE<span style="color:var(--accent-color)">MACHINE</span>
+      </div>
+    </div>
+    <div class="tab-container">
+      <button class="tab-btn active" data-tab="noise-page">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path
+            d="M12 4C14.2 4 16 5.8 16 8C16 10.1 14.2 12 12 12C9.8 12 8 10.1 8 8C8 5.8 9.8 4 12 4M12 2C8.7 2 6 4.7 6 8C6 11.3 8.7 14 12 14C15.3 14 18 11.3 18 8C18 4.7 15.3 2 12 2M12 16C7 16 2.7 18.6 2 22H22C21.3 18.6 17 16 12 16Z" />
+        </svg>
+        Noise
+      </button>
+      <button class="tab-btn" data-tab="burner-page">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path
+            d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4M20 18V6L12 11L4 6V18H20M12 13L4 8V6L12 11L20 6V8L12 13Z" />
+        </svg>
+        Burner
+      </button>
+      <button class="tab-btn" data-tab="tunnel-page">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2M13 17H11V15H13V17M13 13H11V7H13V13Z" />
+        </svg>
+        Tunnel
+      </button>
+      <button class="tab-btn" data-tab="shield-page">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path
+            d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 11.97C10.6 11.97 9.5 10.84 9.5 9.47C9.5 8.1 10.6 6.97 12 6.97C13.4 6.97 14.5 8.1 14.5 9.47C14.5 10.84 13.4 11.97 12 11.97M16.9 16.89C15.5 17.89 13.8 18.39 12 18.39C10.2 18.39 8.5 17.89 7.1 16.89C6.6 16.59 6.4 15.99 6.7 15.49C6.9 14.99 7.6 14.79 8.1 15.09C9.2 15.79 10.6 16.19 12 16.19C13.4 16.19 14.8 15.79 15.9 15.09C16.4 14.79 17.1 14.99 17.3 15.49C17.6 15.99 17.4 16.59 16.9 16.89Z" />
+        </svg>
+        Shield
+      </button>
+    </div>
+  </header>
+
+  <div class="main-content">
+
+    <!-- === NOISE PAGE === -->
+    <div id="noise-page" class="page active">
+
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Traffic Generator</h2>
+          <label class="switch">
+            <input type="checkbox" id="noiseToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <span class="control-label">Intensity Level</span>
+          <select id="noiseLevel" style="width: 120px;">
+            <option value="low">Low (Every 10m)</option>
+            <option value="medium">Medium (Every 2m)</option>
+            <option value="high">High (Every 30s)</option>
+          </select>
+        </div>
+
+        <div class="status-indicator">
+          Sites Spoofed: <strong id="siteCount" style="color:var(--text-primary)">0</strong>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Canvas Defense</h2>
+          <div
+            style="font-size:11px; color:var(--accent-color); font-weight:700; border:1px solid var(--accent-color); padding: 2px 6px; border-radius:4px;">
+            ACTIVE</div>
+        </div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
+          Your HTML5 Canvas fingerprint is being randomized with cryptographic noise to prevent tracking.
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- === BURNER PAGE === -->
+    <div id="burner-page" class="page">
+
+      <!-- Identity -->
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Fake Identity</h2>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="control-label" style="margin-bottom:4px; font-size:11px;">FULL NAME</div>
+          <div class="formatted-value" id="fakeName">Loading...</div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="control-label" style="margin-bottom:4px; font-size:11px;">CREDIT CARD (VALID LUHN)</div>
+          <div class="formatted-value" id="fakeCC">Loading...</div>
+        </div>
+
+        <button id="genIdentityBtn" class="btn btn-secondary">
+          <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24">
+            <path
+              d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+          </svg>
+          Regenerate Identity
+        </button>
+      </div>
+
+      <!-- Email -->
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Temp Mailbox</h2>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div class="control-label" style="margin-bottom:4px; font-size:11px;">ACTIVE ADDRESS</div>
+          <div class="formatted-value" id="burnerEmail">Generating...</div>
+        </div>
+
+        <div class="btn-group">
+          <button id="newMailBtn" class="btn btn-primary">New Address</button>
+          <button id="refreshMailBtn" class="btn btn-secondary">Refresh</button>
+        </div>
+        <!-- Fallback Button if needed -->
+        <button id="openWebBtn" class="btn btn-secondary" style="margin-top:8px; display:none;">View on Web</button>
+
+        <div id="inbox-list">
+          <div style="padding:15px; text-align:center; color:#666; font-style:italic;">No messages yet</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- === TUNNEL PAGE === -->
+    <div id="tunnel-page" class="page">
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Traffic Tunneling</h2>
+          <label class="switch">
+            <input type="checkbox" id="proxyToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <span class="control-label">Protocol</span>
+          <select id="proxyType" style="width: 140px;">
+            <option value="socks5">SOCKS5 (Tor)</option>
+            <option value="http">HTTP / HTTPS</option>
+          </select>
+        </div>
+
+        <div class="control-row">
+          <div style="flex:2; margin-right:10px;">
+            <span class="data-label" style="display:block; margin-bottom:4px; font-size:10px;">HOST / IP</span>
+            <input type="text" id="proxyHost" value="127.0.0.1">
+          </div>
+          <div style="flex:1;">
+            <span class="data-label" style="display:block; margin-bottom:4px; font-size:10px;">PORT</span>
+            <input type="number" id="proxyPort" value="9050">
+          </div>
+        </div>
+
+        <div id="proxyStatus" class="status-indicator">
+          Direct Connection (Tunnel Off)
+        </div>
+
+        <div
+          style="margin-top:15px; font-size:11px; color:var(--text-secondary); background:rgba(0,0,0,0.2); padding:8px; border-radius:4px;">
+          <strong>Tip:</strong> Default port 9050 targets the Tor System Service. Use 9150 for Tor Browser.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- === SHIELD PAGE === -->
+    <div id="shield-page" class="page">
+
+      <div class="section-card">
+        <div class="card-header">
+          <h2>User-Agent Spoofing</h2>
+          <label class="switch">
+            <input type="checkbox" id="uaToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <span class="control-label" style="display:block; margin-bottom:6px; font-size:11px; color:#aaa;">TARGET
+            PROFILE</span>
+          <select id="uaProfile">
+            <option value="win_chrome">Windows 10 / Chrome 120</option>
+            <option value="mac_safari">macOS / Safari 17</option>
+            <option value="linux_firefox">Linux / Firefox 120</option>
+            <option value="android_mobile">Android 14 / Chrome</option>
+            <option value="iphone_mobile">iPhone 15 / Safari</option>
+          </select>
+        </div>
+
+        <div class="formatted-value" id="currentUA" style="font-size:10px; color:#888;">
+          Current: Default System UA
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-header">
+          <h2>Network Privacy</h2>
+        </div>
+
+        <div class="control-row">
+          <div>
+            <div class="control-label">WebRTC Protection</div>
+            <div style="font-size:10px; color:#666;">Block IP Leaks</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="webrtcToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div style="height:1px; background:#333; margin:10px 0;"></div>
+
+        <div class="control-row">
+          <div>
+            <div class="control-label">URL Cleaner</div>
+            <div style="font-size:10px; color:#666;">Strip utm_, fbclid tags</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="urlCleanToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div style="text-align:center; padding:10px; color:#444; font-size:10px; border-top:1px solid #111;">
+    <span
+      style="background:#ff9800; color:#000; padding:1px 4px; border-radius:3px; font-weight:700; margin-right:6px;">BETA</span>
+    Dev by <strong style="color:#666; font-family:monospace;">g4sk0</strong>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

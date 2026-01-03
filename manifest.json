@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "The Noise Machine - Data Poisoning",
+  "version": "0.3.0",
+  "version_name": "0.3.0 Beta",
+  "author": "g4sk0",
+  "description": "Obfuscate your digital footprint by generating background noise traffic and spoofing fingerprints.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "scripting",
+    "tabs",
+    "declarativeNetRequest",
+    "proxy",
+    "privacy"
+  ],
+  "icons": {
+    "16": "icons/antisurveilence.png",
+    "48": "icons/antisurveilence.png",
+    "128": "icons/antisurveilence.png"
+  },
+  "host_permissions": [
+    "<all_urls>",
+    "https://api.guerrillamail.com/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "src/rules.json"
+      }
+    ]
+  },
+  "background": {
+    "service_worker": "src/background/noise_engine.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Noise Machine Control",
+    "default_icon": {
+      "16": "icons/antisurveilence.png",
+      "48": "icons/antisurveilence.png",
+      "128": "icons/antisurveilence.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content/spoofing.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/content/spoofing.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

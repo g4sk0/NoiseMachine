@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "requestHeaders": [
+                {
+                    "header": "Origin",
+                    "operation": "set",
+                    "value": "https://www.guerrillamail.com"
+                },
+                {
+                    "header": "Referer",
+                    "operation": "set",
+                    "value": "https://www.guerrillamail.com/"
+                }
+            ]
+        },
+        "condition": {
+            "urlFilter": "guerrillamail.com",
+            "resourceTypes": [
+                "xmlhttprequest"
+            ]
+        }
+    }
+]
